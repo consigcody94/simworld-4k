@@ -105,9 +105,9 @@ export class CameraController {
         );
 
         const right = new THREE.Vector3(
-            Math.cos(this.rotation.yaw),
+            -Math.cos(this.rotation.yaw),
             0,
-            -Math.sin(this.rotation.yaw)
+            Math.sin(this.rotation.yaw)
         );
 
         const up = new THREE.Vector3(0, 1, 0);

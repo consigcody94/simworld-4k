@@ -6,6 +6,8 @@ import { CityManager } from '../city/CityManager.js';
 import { TimeSystem } from '../systems/TimeSystem.js';
 import { WeatherSystem } from '../systems/WeatherSystem.js';
 import { LODSystem } from '../systems/LODSystem.js';
+import { PostProcessingManager } from '../graphics/PostProcessing.js';
+import { SkySystem } from '../graphics/SkySystem.js';
 
 export class Engine {
     constructor() {
@@ -19,6 +21,8 @@ export class Engine {
         this.timeSystem = null;
         this.weatherSystem = null;
         this.lodSystem = null;
+        this.postProcessing = null;
+        this.skySystem = null;
 
         this.clock = new THREE.Clock();
         this.lastTime = 0;
@@ -56,8 +60,12 @@ export class Engine {
         this.setupCamera();
 
         // Create world
-        this.world = new World(this.scene);
+        this.world = new World(this.scene, this.renderer);
         await this.world.initialize();
+
+        // Create sky system
+        this.skySystem = new SkySystem(this.scene);
+        this.skySystem.initialize();
 
         // Create camera controller
         this.cameraController = new CameraController(this.camera, this.renderer.domElement);
@@ -74,6 +82,9 @@ export class Engine {
 
         // Setup lights
         this.setupLights();
+
+        // Setup post-processing
+        this.postProcessing = new PostProcessingManager(this.renderer, this.scene, this.camera);
 
         // Handle window resize
         window.addEventListener('resize', () => this.onResize());
@@ -168,8 +179,12 @@ export class Engine {
         // Update systems
         this.update(deltaTime, elapsedTime);
 
-        // Render
-        this.renderer.render(this.scene, this.camera);
+        // Render with post-processing
+        if (this.postProcessing) {
+            this.postProcessing.render(deltaTime);
+        } else {
+            this.renderer.render(this.scene, this.camera);
+        }
     }
 
     update(deltaTime, elapsedTime) {
@@ -180,9 +195,19 @@ export class Engine {
             this.cameraController.update(dt);
         }
 
+        // Update sky system
+        if (this.skySystem && this.timeSystem) {
+            this.skySystem.update(this.timeSystem.timeOfDay, dt);
+        }
+
         // Update time system (day/night)
         if (this.timeSystem) {
             this.timeSystem.update(dt, this.sunLight, this.ambientLight, this.hemiLight, this.scene);
+
+            // Update water sun direction
+            if (this.world && this.world.water && this.skySystem) {
+                this.world.water.updateSunDirection(this.skySystem.getSunDirection());
+            }
         }
 
         // Update weather
@@ -236,6 +261,10 @@ export class Engine {
         this.camera.updateProjectionMatrix();
 
         this.renderer.setSize(width, height);
+
+        if (this.postProcessing) {
+            this.postProcessing.resize(width, height);
+        }
     }
 
     // Public methods for UI controls

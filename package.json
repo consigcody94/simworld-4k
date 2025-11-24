@@ -15,7 +15,8 @@
   "dependencies": {
     "three": "^0.160.0",
     "cannon-es": "^0.20.0",
-    "simplex-noise": "^4.0.1"
+    "simplex-noise": "^4.0.1",
+    "postprocessing": "^6.35.3"
   },
   "devDependencies": {
     "vite": "^5.0.0"

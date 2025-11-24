@@ -1,11 +1,12 @@
 import * as THREE from 'three';
-import { Terrain } from './Terrain.js';
-import { Water } from './Water.js';
+import { EnhancedTerrain } from '../graphics/EnhancedTerrain.js';
+import { AdvancedWater } from '../graphics/AdvancedWater.js';
 import { ChunkManager } from './ChunkManager.js';
 
 export class World {
-    constructor(scene) {
+    constructor(scene, renderer) {
         this.scene = scene;
+        this.renderer = renderer;
         this.terrain = null;
         this.water = null;
         this.chunkManager = null;
@@ -18,12 +19,12 @@ export class World {
         // Create chunk manager for infinite world
         this.chunkManager = new ChunkManager(this.scene);
 
-        // Create terrain
-        this.terrain = new Terrain(this.scene);
+        // Create enhanced terrain
+        this.terrain = new EnhancedTerrain(this.scene);
         await this.terrain.initialize();
 
-        // Create water
-        this.water = new Water(this.scene);
+        // Create advanced water
+        this.water = new AdvancedWater(this.scene, this.renderer);
         await this.water.initialize();
 
         // Add initial vegetation
@@ -124,9 +125,9 @@ export class World {
             this.chunkManager.update(cameraPosition);
         }
 
-        // Update water animation
+        // Update advanced water animation
         if (this.water) {
-            this.water.update(deltaTime);
+            this.water.update(deltaTime, cameraPosition);
         }
 
         // Animate vegetation (sway in wind)

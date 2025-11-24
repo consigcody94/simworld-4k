@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Building } from './Building.js';
+import { EnhancedBuilding } from '../graphics/EnhancedBuilding.js';
 import { Road } from './Road.js';
 
 export class CityGenerator {
@@ -30,15 +30,17 @@ export class CityGenerator {
                 if (Math.random() > 0.2) {
                     const buildingWidth = blockSize - 2;
                     const buildingDepth = blockSize - 2;
-                    const buildingHeight = 5 + Math.random() * 20;
+                    const buildingHeight = 10 + Math.random() * 30;
+                    const style = EnhancedBuilding.randomStyle();
 
-                    const building = new Building(
+                    const building = new EnhancedBuilding(
                         this.scene,
                         worldX + roadWidth,
                         worldZ + roadWidth,
                         buildingWidth,
                         buildingHeight,
-                        buildingDepth
+                        buildingDepth,
+                        style
                     );
 
                     buildings.push(building);
