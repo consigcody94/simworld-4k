@@ -156,6 +156,30 @@ Contributions are welcome! Feel free to:
 
 MIT License - feel free to use this project for learning and experimentation!
 
+## 🎨 Custom 3D Models
+
+SimWorld supports loading custom GLTF/GLB models! See **[MODELS.md](MODELS.md)** for the complete guide.
+
+### Quick Start with Custom Models
+
+1. Download free models from:
+   - **Quaternius** (quaternius.com) - 100+ free animals (CC0)
+   - **Poly Pizza** (poly.pizza) - Curated free 3D models
+   - **Sketchfab** (filter by CC0 license)
+
+2. Place models in `public/models/` directory
+3. Update `src/loaders/ModelLoader.js` with file paths
+4. Restart the server - your models are now in the world!
+
+Example:
+```javascript
+this.modelUrls = {
+    'eagle': '/models/my-eagle.glb',
+    'fish': '/models/my-fish.glb',
+    'deer': '/models/my-deer.glb'
+};
+```
+
 ## 🌟 Roadmap
 
 - [ ] VR support
@@ -166,6 +190,8 @@ MIT License - feel free to use this project for learning and experimentation!
 - [ ] Advanced weather (storms, lightning)
 - [ ] Particle effects (dust, pollen)
 - [ ] Sound design and ambient audio
+- [x] GLTF/GLB model loader
+- [x] City placement on land only
 
 ---
 
