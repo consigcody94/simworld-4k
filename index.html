@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimWorld 4K - Living World Simulation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background: #000;
+        }
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+        #ui-overlay {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        #ui-overlay h2 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+        .control-group {
+            margin: 10px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button.active {
+            background: #ff9800;
+        }
+        .stats {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            font-size: 24px;
+            z-index: 1000;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading">
+        <div class="spinner"></div>
+        <div>Loading SimWorld...</div>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <div id="ui-overlay">
+        <h2>🌍 SimWorld 4K</h2>
+
+        <div class="control-group">
+            <strong>Camera Views:</strong><br>
+            <button id="btn-bird-view">🦅 Bird View</button>
+            <button id="btn-human-view">🚶 Human View</button>
+            <button id="btn-fish-view">🐟 Fish View</button>
+        </div>
+
+        <div class="control-group">
+            <strong>Simulation:</strong><br>
+            <button id="btn-toggle-birds">Birds</button>
+            <button id="btn-toggle-fish">Fish</button>
+            <button id="btn-toggle-animals">Animals</button>
+            <button id="btn-toggle-traffic">Traffic</button>
+            <button id="btn-toggle-construction">Construction</button>
+        </div>
+
+        <div class="control-group">
+            <strong>Environment:</strong><br>
+            <button id="btn-toggle-weather">Weather</button>
+            <button id="btn-time-cycle">Day/Night</button>
+        </div>
+
+        <div class="stats">
+            <strong>Statistics:</strong><br>
+            FPS: <span id="fps">0</span><br>
+            Birds: <span id="bird-count">0</span><br>
+            Fish: <span id="fish-count">0</span><br>
+            Animals: <span id="animal-count">0</span><br>
+            Vehicles: <span id="vehicle-count">0</span><br>
+            Buildings: <span id="building-count">0</span>
+        </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
