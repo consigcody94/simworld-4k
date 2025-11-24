@@ -15,15 +15,42 @@ export class CityGenerator {
         const blockSize = 20;
         const roadWidth = 4;
 
-        // Generate grid-based city
+        // Find suitable location on land (not in water)
+        let cityBaseHeight = 0;
+        let cityX = offsetX;
+        let cityZ = offsetZ;
+
+        // Sample terrain to find land area
+        for (let attempt = 0; attempt < 10; attempt++) {
+            const testX = offsetX + (Math.random() - 0.5) * 100;
+            const testZ = offsetZ + (Math.random() - 0.5) * 100;
+            const height = this.world.getHeightAt(testX, testZ);
+
+            if (height > 5 && height < 20) { // Good elevation for city
+                cityX = testX;
+                cityZ = testZ;
+                cityBaseHeight = height;
+                break;
+            }
+        }
+
+        // Generate grid-based city on suitable terrain
         for (let x = 0; x < sizeX; x += blockSize + roadWidth) {
             for (let z = 0; z < sizeZ; z += blockSize + roadWidth) {
-                const worldX = offsetX + x - sizeX / 2;
-                const worldZ = offsetZ + z - sizeZ / 2;
+                const worldX = cityX + x - sizeX / 2;
+                const worldZ = cityZ + z - sizeZ / 2;
 
-                // Create road intersections
-                const roadH = new Road(this.scene, worldX, worldZ, blockSize + roadWidth, roadWidth, 'horizontal');
-                const roadV = new Road(this.scene, worldX, worldZ, roadWidth, blockSize + roadWidth, 'vertical');
+                // Check terrain height - only build on suitable land
+                const terrainHeight = this.world.getHeightAt(worldX, worldZ);
+
+                // Only build city on land (above water level and not too steep)
+                if (terrainHeight < 3 || terrainHeight > 25) {
+                    continue; // Skip this block if underwater or too steep
+                }
+
+                // Create road intersections at terrain level
+                const roadH = new Road(this.scene, worldX, worldZ, blockSize + roadWidth, roadWidth, 'horizontal', terrainHeight);
+                const roadV = new Road(this.scene, worldX, worldZ, roadWidth, blockSize + roadWidth, 'vertical', terrainHeight);
                 roads.push(roadH, roadV);
 
                 // Create building if not on road
@@ -40,7 +67,8 @@ export class CityGenerator {
                         buildingWidth,
                         buildingHeight,
                         buildingDepth,
-                        style
+                        style,
+                        terrainHeight
                     );
 
                     buildings.push(building);

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Fish } from './Fish.js';
+import { RealisticFish } from '../../models/RealisticFish.js';
 
 export class School {
     constructor(scene, count, startPosition) {
@@ -18,11 +18,13 @@ export class School {
                 z: (Math.random() - 0.5) * 15
             };
 
-            const fish = new Fish(
+            const species = RealisticFish.randomSpecies();
+            const fish = new RealisticFish(
                 this.scene,
                 startPosition.x + offset.x,
                 startPosition.y + offset.y,
-                startPosition.z + offset.z
+                startPosition.z + offset.z,
+                species
             );
 
             this.fish.push(fish);

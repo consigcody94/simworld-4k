@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 export class EnhancedBuilding {
-    constructor(scene, x, z, width, height, depth, style = 'modern') {
+    constructor(scene, x, z, width, height, depth, style = 'modern', terrainHeight = 0) {
         this.scene = scene;
         this.x = x;
         this.z = z;
@@ -9,6 +9,7 @@ export class EnhancedBuilding {
         this.height = height;
         this.depth = depth;
         this.style = style;
+        this.terrainHeight = terrainHeight;
 
         this.mesh = null;
         this.currentHeight = 0;
@@ -35,7 +36,7 @@ export class EnhancedBuilding {
                 this.createModernBuilding();
         }
 
-        this.mesh.position.set(this.x, 0, this.z);
+        this.mesh.position.set(this.x, this.terrainHeight, this.z);
         this.mesh.scale.y = 0; // Start scaled down for construction animation
 
         this.scene.add(this.mesh);

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Bird } from './Bird.js';
+import { RealisticBird } from '../../models/RealisticBird.js';
 
 export class Flock {
     constructor(scene, count, startPosition) {
@@ -18,11 +18,13 @@ export class Flock {
                 z: (Math.random() - 0.5) * 20
             };
 
-            const bird = new Bird(
+            const species = RealisticBird.randomSpecies();
+            const bird = new RealisticBird(
                 this.scene,
                 startPosition.x + offset.x,
                 startPosition.y + offset.y,
-                startPosition.z + offset.z
+                startPosition.z + offset.z,
+                species
             );
 
             this.birds.push(bird);

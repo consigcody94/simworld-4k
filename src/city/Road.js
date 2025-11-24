@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 
 export class Road {
-    constructor(scene, x, z, width, depth, orientation) {
+    constructor(scene, x, z, width, depth, orientation, terrainHeight = 0) {
         this.scene = scene;
         this.x = x;
         this.z = z;
         this.width = width;
         this.depth = depth;
         this.orientation = orientation;
+        this.terrainHeight = terrainHeight;
 
         this.createRoad();
     }
@@ -22,7 +23,7 @@ export class Road {
 
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.rotation.x = -Math.PI / 2;
-        this.mesh.position.set(this.x, 0.1, this.z);
+        this.mesh.position.set(this.x, this.terrainHeight + 0.1, this.z);
         this.mesh.receiveShadow = true;
 
         this.scene.add(this.mesh);

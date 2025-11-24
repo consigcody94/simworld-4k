@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Animal } from './Animal.js';
+import { RealisticAnimal } from '../../models/RealisticAnimal.js';
 
 export class AnimalHerd {
     constructor(scene, world, count, startPosition) {
@@ -21,7 +21,8 @@ export class AnimalHerd {
             const z = startPosition.z + offset.z;
             const y = this.world.getHeightAt(x, z);
 
-            const animal = new Animal(this.scene, this.world, x, y, z);
+            const species = RealisticAnimal.randomSpecies();
+            const animal = new RealisticAnimal(this.scene, this.world, x, y, z, species);
             this.animals.push(animal);
         }
     }
